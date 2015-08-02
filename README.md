@@ -6,12 +6,15 @@ Quantile Function
 
 The [quantile function](https://en.wikipedia.org/wiki/Quantile_function) for a [Triangular](https://en.wikipedia.org/wiki/Triangular_distribution) random variable is
 
-<div class="equation" align="center" data-raw-text="" data-equation="eq:quantile_function">
-	<img src="" alt="Quantile function for a Triangular distribution.">
+<div class="equation" align="center" data-raw-text="Q(p;a,b,c) = \begin{cases}
+a + \sqrt{(b-a)(c-a)p} &amp; \text{ for } 0 \le p \le F(c) \\
+b - \sqrt{(b-a)(b-c)(1-p)} &amp; \text{ for } F(c) \le p \le 1
+\end{cases}" data-equation="eq:quantile_function">
+	<img src="https://cdn.rawgit.com/distributions-io/triangular-quantile/114357a0dac500a2da2e894b12da8b48f57aa4b3/docs/img/eqn.svg" alt="Quantile function for a Triangular distribution.">
 	<br>
 </div>
 
-for `0 <= p < 1`, where `a` is the lower limit and `b` is the upper limit and `c` is the mode.
+where `a` is the lower limit, `b` is the upper limit and `c` is the mode.
 
 ## Installation
 
@@ -40,15 +43,15 @@ var matrix = require( 'dstructs-matrix' ),
 	i;
 
 out = quantile( 0.25 );
-// returns
+// returns ~0.354
 
 x = [ 0, 0.2, 0.4, 0.6, 0.8, 1 ];
 out = quantile( x );
-// returns [...]
+// returns [ 0, ~0.316, ~0.447, ~0.553, ~0.684, 1 ]
 
 x = new Float32Array( x );
 out = quantile( x );
-// returns Float64Array( [...] )
+// returns Float64Array( 0,~0.316,~0.447,~0.553,~0.684,1] )
 
 x = new Float32Array( 6 );
 for ( i = 0; i < 6; i++ ) {
@@ -63,9 +66,9 @@ mat = matrix( x, [3,2], 'float32' );
 
 out = quantile( mat );
 /*
-	[
-
-	   ]
+	[  0     ~0.289
+	  ~0.408 ~0.5
+	  ~0.592 ~0.711 ]
 */
 ```
 
@@ -73,24 +76,24 @@ The function accepts the following `options`:
 
 *	__a__: lower limit. Default: `0`.
 *	__b__: upper limit. Default: `1`.
-*	__c__: mode. Default: `0.5`.
+*	__c__: mode. Default: `( a + b ) / 2`.
 * 	__accessor__: accessor `function` for accessing `array` values.
 * 	__dtype__: output [`typed array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Typed_arrays) or [`matrix`](https://github.com/dstructs/matrix) data type. Default: `float64`.
 *	__copy__: `boolean` indicating if the `function` should return a new data structure. Default: `true`.
 *	__path__: [deepget](https://github.com/kgryte/utils-deep-get)/[deepset](https://github.com/kgryte/utils-deep-set) key path.
 *	__sep__: [deepget](https://github.com/kgryte/utils-deep-get)/[deepset](https://github.com/kgryte/utils-deep-set) key path separator. Default: `'.'`.
 
-A [Triangular](https://en.wikipedia.org/wiki/Triangular_distribution) distribution is a function of 3 parameter(s): `a`(lower limit) and `b`(upper limit) and `c`(mode). By default, `a` is equal to `0` and `b` is equal to `1` and `c` is equal to `0.5`. To adjust either parameter, set the corresponding option(s).
+A [Triangular](https://en.wikipedia.org/wiki/Triangular_distribution) distribution is a function of three parameters: `a`(lower limit), `b`(upper limit) and `c`(mode). By default, `a` is equal to `0` and `b` is equal to `1` and `c` is equal to `( a + b ) / 2 = 0.5`. To adjust either parameter, set the corresponding option.
 
 ``` javascript
 var x = [ 0, 0.2, 0.4, 0.6, 0.8, 1 ];
 
 var out = quantile( x, {
-	'a': 4,
-	'b': 1,
-	'c': 5
+	'a': 1,
+	'b': 4,
+	'c': 3
 });
-// returns [...]
+// returns [ 1, ~2.1, ~2.55, ~2.9, ~3.23, 4 ]
 ```
 
 For non-numeric `arrays`, provide an accessor `function` for accessing `array` values.
@@ -112,7 +115,7 @@ function getValue( d, i ) {
 var out = quantile( data, {
 	'accessor': getValue
 });
-// returns [...]
+// returns [ 0, ~0.316, ~0.447, ~0.553, ~0.684, 1 ]
 ```
 
 
@@ -134,12 +137,12 @@ var out = quantile( data, {
 });
 /*
 	[
-		{'x':[0,]},
-		{'x':[1,]},
-		{'x':[2,]},
-		{'x':[3,]},
-		{'x':[4,]},
-		{'x':[5,]}
+		{'x':[0,0]},
+		{'x':[1,~0.316]},
+		{'x':[2,~0.447]},
+		{'x':[3,~0.554]},
+		{'x':[4,~0.684]},
+		{'x':[5,1]}
 	]
 */
 
@@ -155,15 +158,21 @@ var x, out;
 x = new Float32Array( [0.2,0.4,0.6,0.8] );
 
 out = quantile( x, {
-	'dtype': 'int32'
+	'dtype': 'int32',
+	'a': 1,
+	'b': 4,
+	'c': 3
 });
-// returns Int32Array( [...] )
+// returns Int32Array( [2,2,2,3] )
 
 // Works for plain arrays, as well...
 out = quantile( [0.2,0.4,0.6,0.8], {
-	'dtype': 'uint8'
+	'dtype': 'uint8',
+	'a': 1,
+	'b': 4,
+	'c': 3
 });
-// returns Uint8Array( [...] )
+// returns Uint8Array( [2,2,2,3] )
 ```
 
 By default, the function returns a new data structure. To mutate the input data structure (e.g., when input values can be discarded or when optimizing memory usage), set the `copy` option to `false`.
@@ -180,14 +189,15 @@ x = [ 0, 0.2, 0.4, 0.6, 0.8, 1 ];
 out = quantile( x, {
 	'copy': false
 });
-// returns [...]
+// returns [ 0, ~0.316, ~0.447, ~0.553, ~0.684, 1 ]
+
 
 bool = ( x === out );
 // returns true
 
 x = new Float32Array( 6 );
 for ( i = 0; i < 6; i++ ) {
-	x[ i ] = i / 6 ;
+	x[ i ] = i / 6;
 }
 mat = matrix( x, [3,2], 'float32' );
 /*
@@ -200,9 +210,9 @@ out = quantile( mat, {
 	'copy': false
 });
 /*
-	[
-
-	   ]
+	[  0     ~0.289
+	  ~0.408 ~0.5
+	  ~0.592 ~0.711 ]
 */
 
 bool = ( mat === out );
@@ -391,7 +401,7 @@ Copyright &copy; 2015. The [Compute.io](https://github.com/compute-io) Authors.
 [travis-image]: http://img.shields.io/travis/distributions-io/triangular-quantile/master.svg
 [travis-url]: https://travis-ci.org/distributions-io/triangular-quantile
 
-[codecov-image]: https://img.shields.io/codecov/github/distributions-io/triangular-quantile/master.svg
+[codecov-image]: https://img.shields.io/codecov/c/github/distributions-io/triangular-quantile/master.svg
 [codecov-url]: https://coveralls.io/github/distributions-io/triangular-quantile?branch=master
 
 [dependencies-image]: http://img.shields.io/david/distributions-io/triangular-quantile.svg
