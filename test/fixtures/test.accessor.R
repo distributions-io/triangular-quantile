@@ -1,10 +1,10 @@
 options( digits = 16 )
 library( jsonlite )
+library( triangle )
 
-
-a = 0
-b = 1
-c = 0.5
+a = -20
+b = 20
+c = 4
 probs = seq( 0, 1, 0.01 )
 y = qtriangle( probs, a, b, c )
 
