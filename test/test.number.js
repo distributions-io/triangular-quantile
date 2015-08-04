@@ -10,7 +10,7 @@ var // Expectation library:
 	isFiniteNumber = require( 'validate.io-finite' ),
 
 	// Check whether an element is `NaN`
-	isnan = require( 'validate.io-nan' ),	
+	isnan = require( 'validate.io-nan' ),
 
 	// Module to be tested:
 	quantile = require( './../lib/number.js' );
@@ -45,7 +45,7 @@ describe( 'number quantile', function tests() {
 		expect( quantile ).to.be.a( 'function' );
 	});
 
-	it( 'should evaluate the quantile function of the Triangular distribution', function test() {
+	it( 'should evaluate the quantile function', function test() {
 		var actual;
 		for ( var i = 0; i < data.length; i++ ) {
 			actual =  quantile( data[ i ], a, b, c );

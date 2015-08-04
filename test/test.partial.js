@@ -10,7 +10,7 @@ var // Expectation library:
 	isFiniteNumber = require( 'validate.io-finite' ),
 
 	// Check whether an element is `NaN`
-	isnan = require( 'validate.io-nan' ),	
+	isnan = require( 'validate.io-nan' ),
 
 	// Module to be tested:
 	partial = require( './../lib/partial.js' );
@@ -24,7 +24,7 @@ var expect = chai.expect,
 
 // TESTS //
 
-describe( 'partial quantile', function tests() {
+describe( 'partial', function tests() {
 
 	var	validationData = require( './fixtures/partial.json' ),
 		data = validationData.data,
@@ -45,7 +45,7 @@ describe( 'partial quantile', function tests() {
 		expect( partial ).to.be.a( 'function' );
 	});
 
-	it( 'should partially apply the quantile function of the Triangular distribution for given parameter values', function test() {
+	it( 'should partially apply the quantile function for given parameter values', function test() {
 		var quantile;
 		quantile = partial( a, b, c );
 		expect( quantile ).to.be.a( 'function' );

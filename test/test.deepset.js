@@ -10,7 +10,7 @@ var // Expectation library:
 	isFiniteNumber = require( 'validate.io-finite' ),
 
 	// Module to be tested:
-	pdf = require( './../lib/deepset.js' );
+	quantile = require( './../lib/deepset.js' );
 
 
 // VARIABLES //
@@ -21,7 +21,7 @@ var expect = chai.expect,
 
 // TESTS //
 
-describe( 'deepset pdf', function tests() {
+describe( 'deepset quantile', function tests() {
 
 	var validationData = require( './fixtures/deepset.json' ),
 		a = validationData.a,
@@ -29,17 +29,17 @@ describe( 'deepset pdf', function tests() {
 		c = validationData.c;
 
 	it( 'should export a function', function test() {
-		expect( pdf ).to.be.a( 'function' );
+		expect( quantile ).to.be.a( 'function' );
 	});
 
-	it( 'should compute the Triangular pdf and deep set', function test() {
+	it( 'should compute the quantile function and deep set', function test() {
 		var data, expected, i;
 
 		data = validationData.data.map( function( e ) {
 			return {'x': e};
 		});
 
-		data = pdf( data, a, b, c, 'x' );
+		data = quantile( data, a, b, c, 'x' );
 
 		expected = validationData.expected
 			.map( function( d ) {
@@ -66,7 +66,7 @@ describe( 'deepset pdf', function tests() {
 			return {'x': [9, e]};
 		});
 
-		data = pdf( data, a, b, c, 'x/1', '/' );
+		data = quantile( data, a, b, c, 'x/1', '/' );
 		expected = validationData.expected
 			.map( function( d ) {
 				if (d === 'Inf' ) {
@@ -89,8 +89,8 @@ describe( 'deepset pdf', function tests() {
 	});
 
 	it( 'should return an empty array if provided an empty array', function test() {
-		assert.deepEqual( pdf( [], a, b, c, 'x' ), [] );
-		assert.deepEqual( pdf( [], a, b, c, 'x', '/' ), [] );
+		assert.deepEqual( quantile( [], a, b, c, 'x' ), [] );
+		assert.deepEqual( quantile( [], a, b, c, 'x', '/' ), [] );
 	});
 
 	it( 'should handle non-numeric values by setting the element to NaN', function test() {
@@ -102,7 +102,7 @@ describe( 'deepset pdf', function tests() {
 			{'x':[]},
 			{'x':{}}
 		];
-		actual = pdf( data, a, b, c, 'x' );
+		actual = quantile( data, a, b, c, 'x' );
 
 		expected = [
 			{'x':NaN},
