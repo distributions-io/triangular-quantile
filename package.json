@@ -29,7 +29,9 @@
     "statistics",
     "stats",
     "cdf",
-    "inverse"
+    "inverse",
+    "continuous",
+    "univariate"
   ],
   "bugs": {
     "url": "https://github.com/compute-io/triangular-quantile/issues"
