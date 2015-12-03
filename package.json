@@ -20,11 +20,12 @@
   "main": "./lib",
   "repository": {
     "type": "git",
-    "url": "git://github.com/compute-io/triangular-quantile.git"
+    "url": "git://github.com/distributions-io/triangular-quantile.git"
   },
   "keywords": [
     "distributions.io",
     "distributions",
+    "distribution",
     "probability",
     "statistics",
     "stats",
@@ -34,7 +35,7 @@
     "univariate"
   ],
   "bugs": {
-    "url": "https://github.com/compute-io/triangular-quantile/issues"
+    "url": "https://github.com/distributions-io/triangular-quantile/issues"
   },
   "dependencies": {
     "compute-array-constructors": "^1.0.0",
